@@ -67,6 +67,9 @@ URL PUT /url/update/:id
 6. Delete 
 URL DELETE /url/delete/:id
 
+7. Analytics
+URL GET  /url/:urlId/analytics
+
 
 
 

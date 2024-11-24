@@ -2,6 +2,7 @@ const crypto = require('crypto');
 const Url = require('../models/Url');
 const { Op } = require('sequelize');
 const { sendErrorResponse } = require('../utils/responseHandler');
+const UrlAccessLog = require('../models/urlAccessLog');
 
 // USING LOCAL URL SHORTNER BECAUSE OTHER PACKAGES ARE TAKING TIME FOR PROMISE RETURN
 const generateAlias = () => crypto.randomBytes(4).toString('hex');
@@ -15,10 +16,22 @@ const redirectShortUrl = async (req, res) => {
       if (!urlRecord) {
         return sendErrorResponse(res, "Shortened URL does not exist.", 404);
       }
-      
+
       if (urlRecord?.expirationStatus) {
         return sendErrorResponse(res, "The shortened URL has expired.", 410);
       }
+
+      await Url.update(
+        { clickCount: urlRecord.clickCount + 1 },
+        { where: { id: urlRecord.id } }
+      );
+  
+      // Log access metadata
+      await UrlAccessLog.create({
+        urlId: urlRecord.id,
+        ipAddress: req.ip,
+        userAgent: req.headers['user-agent'] || 'Unknown',
+      });
   
       // Redirect to the original URL
       return res.redirect(urlRecord.originalUrl);
