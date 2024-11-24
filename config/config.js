@@ -7,7 +7,7 @@ const urlmgmtDB = new Sequelize(process.env.URL_PROJECT_DB, process.env.DB_USERN
 const urlmgmtDBFn = async()=> {
     try{
         await urlmgmtDB.authenticate();
-        console.log('Work Order Sequelize connection has been established successfully');
+        console.log('Sequelize connection has been established successfully');
     }
     catch(err){
         console.error('Unable to connect to database', err);
