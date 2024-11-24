@@ -17,6 +17,7 @@ const bodyParser = require('body-parser');
 
 //Import routes here
 const authRoutes = require('./routes/authRoute');
+const urlRoutes = require('./routes/urlRoute');
 
 const { urlmgmtDB } = require('./config/config');
 
@@ -36,6 +37,7 @@ app.use('/home', () => {
   console.log('Inside home');
 });
 app.use('/auth', authRoutes);
+app.use('/api', urlRoutes);
 
 module.exports = app.listen(port, () =>
   console.log(`Server up and running on ${port}`)
