@@ -1,6 +1,7 @@
 /* eslint-disable no-undef */
 const express = require('express');
 const cors = require('cors');
+const helmet = require('helmet');
 
 const app = express();
 
@@ -26,6 +27,8 @@ app.use(morgan('tiny'));
 urlmgmtDB;
 
 const port = 8000;
+
+app.use(helmet());
 
 app.use(bodyParser.urlencoded({ extended: false }));
 
