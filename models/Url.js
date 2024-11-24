@@ -19,6 +19,11 @@ const Url = urlmgmtDB.define('Url', {
         type: DataTypes.DATE,
         allowNull: true,
     },
+    expirationStatus: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: false,
+    },
 }, {
     tableName: 'urls',
     timestamps: true,
