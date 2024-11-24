@@ -37,7 +37,7 @@ app.use('/home', () => {
   console.log('Inside home');
 });
 app.use('/auth', authRoutes);
-app.use('/api', urlRoutes);
+app.use('/url', urlRoutes);
 
 module.exports = app.listen(port, () =>
   console.log(`Server up and running on ${port}`)
