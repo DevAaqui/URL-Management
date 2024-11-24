@@ -49,6 +49,24 @@ Request Body:
   "password": "securepassword123"
 }
 
+3. URL shorten
+URL POST /url/shorten
+Request Body:
+{
+  "originalUrl": "https://example.com",
+  "customAlias": "exampleAlias2",
+  "expirationDate": "2024-12-31T23:59:59Z"
+}
+
+4. Retrieve
+URL GET /url/retrieve?page=1&itemsPerPage=10&startDate=2024-01-01&endDate=2024-12-31&isExpired=false
+
+5. Update
+URL PUT /url/update/:id
+
+6. Delete 
+URL DELETE /url/delete/:id
+
 
 
 
