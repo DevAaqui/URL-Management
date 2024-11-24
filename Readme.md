@@ -1,6 +1,6 @@
-# User Management API
+# URL Management API
 
-This is a Node.js-based RESTful API for managing user authentication and metadata. It includes features like user creation, login, and token-based authentication using JWT.
+The URL Management API provides functionalities for managing shortened URLs, enabling users to create, retrieve, update, and delete URLs efficiently. It also supports redirection and analytics tracking for each shortened URL.
 
 # Technologies Used
 - Node.js: Backend runtime environment.
