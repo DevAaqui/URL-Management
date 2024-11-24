@@ -4,6 +4,25 @@ const Url = require('../models/Url');
 // USING LOCAL URL SHORTNER BECAUSE OTHER PACKAGES ARE TAKING TIME FOR PROMISE RETURN
 const generateAlias = () => crypto.randomBytes(4).toString('hex');
 
+const deleteShortUrl = async (req, res) => {
+    const { id } = req.params;
+  
+    try {
+      const urlRecord = await Url.findOne({ where: { id } });
+  
+      if (!urlRecord) {
+        return res.status(404).json({ message: 'URL not found.' });
+      }
+  
+      await urlRecord.destroy();
+  
+      return res.status(200).json({ message: 'Short URL deleted successfully!' });
+    } catch (error) {
+      console.error('Error deleting short URL:', error);
+      return res.status(500).json({ message: 'Internal server error' });
+    }
+  };
+
 const updateShortUrl = async (req, res) => {
     const { id } = req.params;
     const { originalUrl, customAlias, expirationDate } = req.body;
@@ -84,4 +103,5 @@ const createShortUrl = async (req, res) => {
 module.exports = {
   createShortUrl,
   updateShortUrl,
+  deleteShortUrl,
 };
