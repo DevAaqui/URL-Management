@@ -1,8 +1,59 @@
 const crypto = require('crypto');
 const Url = require('../models/Url');
+const { Op } = require('sequelize');
 
 // USING LOCAL URL SHORTNER BECAUSE OTHER PACKAGES ARE TAKING TIME FOR PROMISE RETURN
 const generateAlias = () => crypto.randomBytes(4).toString('hex');
+
+const getShortUrls = async (req, res) => {
+    const userId = req.user.id;
+    const { page = 1, itemsPerPage = 10, startDate, endDate, isExpired } = req.query;
+  
+    const filter = {
+      userId,
+    };
+  
+    if (startDate && endDate) {
+      filter.createdAt = {
+        [Op.between]: [new Date(startDate), new Date(endDate)],
+      };
+    }
+
+    if (isExpired !== undefined) {
+        filter.expirationStatus = isExpired === 'true';
+    }
+  
+    const limit = parseInt(itemsPerPage); 
+    const offset = (parseInt(page) - 1) * limit;
+  
+    try {
+      const urls = await Url.findAll({
+        where: filter,
+        limit,
+        offset,
+      });
+  
+      if (urls.length === 0) {
+        return res.status(404).json({ message: 'No URLs found.' });
+      }
+  
+      const totalUrls = await Url.count({ where: filter });
+  
+      return res.status(200).json({
+        message: 'URLs retrieved successfully.',
+        data: urls,
+        pagination: {
+          page: parseInt(page),
+          itemsPerPage: limit,
+          total: totalUrls,
+          totalPages: Math.ceil(totalUrls / limit),
+        },
+      });
+    } catch (error) {
+      console.error('Error retrieving URLs:', error);
+      return res.status(500).json({ message: 'Internal server error' });
+    }
+  };
 
 const deleteShortUrl = async (req, res) => {
     const { id } = req.params;
@@ -104,4 +155,5 @@ module.exports = {
   createShortUrl,
   updateShortUrl,
   deleteShortUrl,
+  getShortUrls,
 };
